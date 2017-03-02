@@ -23,8 +23,8 @@
         var initI = parseInt(nowdate.getMinutes());
         var initS = parseInt(nowdate.getYear());
         var yearScroll = null,
-            monthScroll = null,
-            dayScroll = null;
+            monthScroll = null;
+        // dayScroll = null;
         var HourScroll = null,
             MinuteScroll = null,
             SecondScroll = null;
@@ -68,19 +68,19 @@
             });
         }
         //>2000年
-        if(opts.beginyear<2000){
-            initY=initY+100;
-        }      
+        if (opts.beginyear < 2000) {
+            initY = initY + 100;
+        }
 
         function refreshDate() {
             yearScroll.refresh();
             monthScroll.refresh();
-            dayScroll.refresh();
+            // dayScroll.refresh();
 
             resetInitDete();
             yearScroll.scrollTo(0, initY * 40, 100, true);
             monthScroll.scrollTo(0, initM * 40 - 40, 100, true);
-            dayScroll.scrollTo(0, initD * 40 - 40, 100, true);
+            // dayScroll.scrollTo(0, initD * 40 - 40, 100, true);
         }
 
         function refreshTime() {
@@ -102,14 +102,14 @@
             indexD = 1;
         }
 
-        function resetInitDete() { 
-            
+        function resetInitDete() {
+
             if (opts.curdate) {
                 return false;
             } else if (that.val() === "") {
                 return false;
             }
-            
+
             initY = parseInt(that.val().substr(2, 2));
             initM = parseInt(that.val().substr(5, 2));
             initD = parseInt(that.val().substr(8, 2));
@@ -118,9 +118,8 @@
         function bindButton() {
             resetIndex();
             $("#dateconfirm").unbind('click').click(function() {
-                var datestr = $("#yearwrapper ul li:eq(" + indexY + ")").html().substr(0, $("#yearwrapper ul li:eq(" + indexY + ")").html().length - 1) + "-" +
-                    $("#monthwrapper ul li:eq(" + indexM + ")").html().substr(0, $("#monthwrapper ul li:eq(" + indexM + ")").html().length - 1) + "-" +
-                    $("#daywrapper ul li:eq(" + Math.round(indexD) + ")").html().substr(0, $("#daywrapper ul li:eq(" + Math.round(indexD) + ")").html().length - 1);
+                var datestr = $("#yearwrapper ul li:eq(" + indexY + ")").html().substr(0, $("#yearwrapper ul li:eq(" + indexY + ")").html().length - 1) + "年" +
+                    $("#monthwrapper ul li:eq(" + indexM + ")").html().substr(0, $("#monthwrapper ul li:eq(" + indexM + ")").html().length - 1) + "月";
                 if (datetime) {
                     if (Math.round(indexS) === 1) { //下午
                         $("#Hourwrapper ul li:eq(" + indexH + ")").html(parseInt($("#Hourwrapper ul li:eq(" + indexH + ")").html().substr(0, $("#Hourwrapper ul li:eq(" + indexH + ")").html().length - 1)) + 12)
@@ -166,8 +165,6 @@
                 onScrollEnd: function() {
                     indexY = (this.y / 40) * (-1) + 1;
                     opts.endday = checkdays(strY, strM);
-                    $("#daywrapper ul").html(createDAY_UL());
-                    dayScroll.refresh();
                 }
             });
             monthScroll = new iScroll("monthwrapper", {
@@ -176,15 +173,6 @@
                 onScrollEnd: function() {
                     indexM = (this.y / 40) * (-1) + 1;
                     opts.endday = checkdays(strY, strM);
-                    $("#daywrapper ul").html(createDAY_UL());
-                    dayScroll.refresh();
-                }
-            });
-            dayScroll = new iScroll("daywrapper", {
-                snap: "li",
-                vScrollbar: false,
-                onScrollEnd: function() {
-                    indexD = (this.y / 40) * (-1) + 1;
                 }
             });
         }
@@ -244,7 +232,6 @@
             CreateDateUI();
             $("#yearwrapper ul").html(createYEAR_UL());
             $("#monthwrapper ul").html(createMONTH_UL());
-            $("#daywrapper ul").html(createDAY_UL());
         }
 
         function CreateDateUI() {
@@ -260,9 +247,6 @@
                 '<ul></ul>' +
                 '</div>' +
                 '<div id="monthwrapper">' +
-                '<ul></ul>' +
-                '</div>' +
-                '<div id="daywrapper">' +
                 '<ul></ul>' +
                 '</div>' +
                 '</div>' +
@@ -297,8 +281,6 @@
             $("#yearwrapper").css("bottom", "200px");
             $("#monthwrapper").css("position", "absolute");
             $("#monthwrapper").css("bottom", "200px");
-            $("#daywrapper").css("position", "absolute");
-            $("#daywrapper").css("bottom", "200px");
         }
 
         //创建 --年-- 列表
@@ -324,14 +306,7 @@
         }
 
         //创建 --日-- 列表
-        function createDAY_UL() {
-            $("#daywrapper ul").html("");
-            var str = "<li>&nbsp;</li>";
-            for (var i = opts.beginday; i <= opts.endday; i++) {
-                str += '<li>' + i + '日</li>';
-            }
-            return str + "<li>&nbsp;</li>";
-        }
+
 
         //创建 --时-- 列表
         function createHOURS_UL() {
